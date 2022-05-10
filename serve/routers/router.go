@@ -18,7 +18,7 @@ func InitRouter() *gin.Engine {
 
 	api_user := r.Group("/user")
 	{
-		//获取标签列表
+		//
 		api_user.POST("/register", register.Register)
 		//新建标签
 

@@ -1,16 +1,38 @@
 package main
 
 import (
-	"esp_webrtc/routers"
-	"net/http"
+	"esp_webrtc/commands/daemon"
+	"fmt"
+	"os"
+
+	"github.com/kardianos/service"
 )
 
 func main() {
-	endPoint := "127.0.0.1:8000"
-	routers := routers.InitRouter()
-	server := &http.Server{
-		Addr:    endPoint,
-		Handler: routers,
+	d := daemon.NewDaemon()
+
+	s, err := service.New(d, d.Config())
+	if len(os.Args) > 1 {
+		if os.Args[1] == "install" {
+			x := s.Install()
+			if x != nil {
+				fmt.Println("error:", x.Error())
+				return
+			}
+			fmt.Println("服务安装成功")
+			return
+		} else if os.Args[1] == "uninstall" {
+			x := s.Uninstall()
+			if x != nil {
+				fmt.Println("error:", x.Error())
+				return
+			}
+			fmt.Println("服务卸载成功")
+			return
+		}
 	}
-	server.ListenAndServe()
+	err = s.Run()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 }

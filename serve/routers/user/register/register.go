@@ -3,7 +3,6 @@ package register
 import (
 	"errors"
 	"esp_webrtc/models"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -26,7 +25,6 @@ func Register(c *gin.Context) {
 	}
 	if !models.Create_user(data.Name, data.Password, data.Email) {
 		err := errors.New("create user error")
-		fmt.Println("插入错误")
 		c.AbortWithStatusJSON(
 			http.StatusInternalServerError,
 			gin.H{"error": err.Error()})

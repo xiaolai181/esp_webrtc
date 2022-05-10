@@ -28,7 +28,7 @@ func Create_user(name string, password string, email string) bool {
 		return true
 	}
 }
-func GetUset(id int) (user Esp_User) {
+func GetUser(id int) (user Esp_User) {
 	db.Where("id = ?", id).First(&user)
 	fmt.Println(user.ID)
 	return
