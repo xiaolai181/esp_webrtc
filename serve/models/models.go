@@ -43,6 +43,7 @@ func init() {
 	var count int64
 	// Model(&User{})查询用户表, Count(&count) 将用户表的数据赋值给count字段。
 	if err := db.Model(&Esp_User{}).Count(&count).Error; err == nil && count == 0 {
+		log.Println("User 表不存在，创建...")
 		//新增
 		db.Create(&Esp_User{
 			Name: "admin",
@@ -50,7 +51,6 @@ func init() {
 			Email: "admin@qq.com",
 			//密码
 			Password: "123123",
-
 			//角色 管理员
 			Role: 0,
 		})
