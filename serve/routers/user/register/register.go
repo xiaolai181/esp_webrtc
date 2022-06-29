@@ -4,6 +4,7 @@ import (
 	"errors"
 	"esp_webrtc/models"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,4 +33,37 @@ func Register(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"msg": "ok"})
 
+}
+
+func Login(c *gin.Context) {
+	var data Register_data
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.AbortWithStatusJSON(
+			http.StatusInternalServerError,
+			gin.H{"error": err.Error()})
+		return
+	}
+	if ok := models.Vaild_User(data.Name, data.Password); ok {
+		c.JSON(http.StatusOK, gin.H{"msg": "ok"})
+
+	}
+}
+
+func GetUserEmailById(c *gin.Context) {
+	id := c.Param("id")
+	if id == "" {
+		c.AbortWithStatusJSON(
+			http.StatusInternalServerError,
+			gin.H{"error": "id is empty"})
+		return
+	}
+	user_id, err := strconv.Atoi(id)
+	if err != nil {
+		c.AbortWithStatusJSON(
+			http.StatusInternalServerError,
+			gin.H{"error": err.Error()})
+		return
+	}
+	user := models.GetUserById(user_id)
+	c.JSON(http.StatusOK, gin.H{"email": user.Email})
 }

@@ -58,6 +58,10 @@ func init() {
 
 }
 
+func DBCreate(value interface{}) {
+	db.Create(value)
+}
+
 func GetDB() *gorm.DB {
 	return db
 }
